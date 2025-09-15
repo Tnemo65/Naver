@@ -23,7 +23,7 @@ export function CalendarView({ tasks }: Props) {
     let monthTaskCount = 0;
     for (let i = 0; i < startWeekday; i++) cells.push({ date: undefined, items: [] });
     for (let d = 1; d <= daysInMonth; d++) {
-      const date = new Date(year, month, d);
+      const date = new Date(`${year}-${String(month + 1).padStart(2, '0')}-${String(d).padStart(2, '0')}T00:00:00`);
       const iso = date.toISOString().slice(0, 10);
       const items = tasks.filter(t => t.dueDate === iso);
       monthTaskCount += items.length;
