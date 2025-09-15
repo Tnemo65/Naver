@@ -10,9 +10,6 @@ type Props = {
 };
 
 export function TaskList({ tasks, onToggle, onUpdate, onDelete, filter = 'all' }: Props) {
-  const now = new Date();
-  // Overdue: only if dueDate is before today (not including today)
-  // Removed unused variable 'now'
   const today = new Date();
   today.setHours(0, 0, 0, 0);
   today.setHours(0, 0, 0, 0);
