@@ -22,13 +22,13 @@ export function CalendarView({ tasks }: Props) {
     const cells: Array<{ date?: Date; items: Task[] }> = [];
     let monthTaskCount = 0;
     for (let i = 0; i < startWeekday; i++) cells.push({ date: undefined, items: [] });
-    for (let d = 1; d <= daysInMonth; d++) {
-      const date = new Date(`${year}-${String(month + 1).padStart(2, '0')}-${String(d).padStart(2, '0')}T00:00:00`);
-      const iso = date.toISOString().slice(0, 10);
-      const items = tasks.filter(t => t.dueDate === iso);
-      monthTaskCount += items.length;
-      cells.push({ date, items });
-    }
+        for (let d = 1; d <= daysInMonth; d++) {
+          const date = new Date(year, month, d); 
+          const iso = `${year}-${String(month + 1).padStart(2, '0')}-${String(d).padStart(2, '0')}`;
+          const items = tasks.filter(t => t.dueDate === iso);
+          monthTaskCount += items.length;
+          cells.push({ date, items });
+        }
     while (cells.length % 7 !== 0) cells.push({ date: undefined, items: [] });
     return { cells, year, month, monthTaskCount };
   }, [tasks, viewYear, viewMonth]);
