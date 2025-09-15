@@ -11,10 +11,19 @@ type Props = {
 
 export function TaskList({ tasks, onToggle, onUpdate, onDelete, filter = 'all' }: Props) {
   const now = new Date();
+  // Overdue: only if dueDate is before today (not including today)
+  // Removed unused variable 'now'
+  const today = new Date();
+  today.setHours(0, 0, 0, 0);
+  today.setHours(0, 0, 0, 0);
   const filtered = tasks.filter(t => {
     if (filter === 'pending') return !t.completedAt;
     if (filter === 'done') return !!t.completedAt;
-    if (filter === 'overdue') return !t.completedAt && t.dueDate && new Date(t.dueDate) < now;
+    if (filter === 'overdue') {
+      if (t.completedAt || !t.dueDate) return false;
+      const due = new Date(t.dueDate + 'T00:00:00');
+      return due < today;
+    }
     return true;
   });
 
@@ -71,7 +80,13 @@ function TaskItem({ task, onToggle, onUpdate, onDelete, index }: {
     }, 200);
   };
 
-  const isOverdue = !task.completedAt && task.dueDate && new Date(task.dueDate) < new Date();
+  // Overdue: only if dueDate is before today (not including today)
+  const isOverdue = !task.completedAt && task.dueDate && (() => {
+    const today = new Date();
+    today.setHours(0, 0, 0, 0);
+    const due = new Date(task.dueDate + 'T00:00:00');
+    return due < today;
+  })();
 
   return (
     <div 

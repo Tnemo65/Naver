@@ -16,7 +16,14 @@ export function AnalyticsView({ tasks }: Props) {
   const total = tasks.length;
   const done = tasks.filter(t => t.completedAt).length;
   const pending = total - done;
-  const overdue = tasks.filter(t => !t.completedAt && t.dueDate && new Date(t.dueDate) < new Date()).length;
+  // Overdue: only if dueDate is before today (not including today)
+  const today = new Date();
+  today.setHours(0, 0, 0, 0);
+  const overdue = tasks.filter(t => {
+    if (t.completedAt || !t.dueDate) return false;
+    const due = new Date(t.dueDate + 'T00:00:00');
+    return due < today;
+  }).length;
 
   // Animate numbers on mount/change
   useEffect(() => {
